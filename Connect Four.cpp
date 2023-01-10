@@ -1,4 +1,3 @@
-//https://replit.com/@Wolfstrrak/DS-MAT01#main.cpp
 #include <bits/stdc++.h>
 using namespace std;
 class GameLoop
@@ -25,48 +24,40 @@ GameLoop()
 }
 void input(string player)
 {
-  here:
+  do{
   cin>>PlayerInput;
-  column = int(PlayerInput - 48);
-  if(column <= 5 && column >= 0)
-    {
-      if(!EmptySlotCheck())
+      if(!EmptySlotCheck() && columncheck(PlayerInput))
         {
-          if( GameArray[column].length() < 7)
-            {
               GameArray[column] += player;
               print();
               row = GameArray[column].length()-1;
               checks();
               cout << endl;
-            }
-        else 
-          {
-            cout<<"Column is full try another : ";
-            goto here;
-          }
         }
-    else
-      {
-        cout<<"\nNo slots left\n";
-        cout<<"Game Over\n";
-        gameOver = true;
-      }
-    }
-  else
-    {
-      cout<<"\nInvalid input\nTry Again between range [0,5]\n";
-      goto here;
-    }
+    }while(!columncheck(PlayerInput));
+}
+
+bool columncheck(int playerInput)
+{
+  column = int(playerInput - 48);
+  if((column <= 5  && column >= 0) && GameArray[column].length() < 7 )
+  {
+    return true;
+  }
+  cout<<"\nInvalid input\nTry Again between range [0,5]\n";
+  return false;
 }
 
 bool EmptySlotCheck()
 { 
-  bool isFilled = true;
   for(int i=0; i< 6; i++)
+    {
       if(GameArray[i].length() < 7)
-          isFilled =  false;
-  return isFilled;
+          return false;
+    }
+  cout<<"\nNo slots left\n";
+  cout<<"Game Over\n";
+  return gameOver = true;
 }
 
 void checks()
@@ -88,7 +79,8 @@ void checks()
               cont += (doublecheck(-dx,-dy) - 1);
               if(cont>=4)
               {
-                cout<<"connected\n";
+                cout<<"\nconnected\n";
+                gameOver = true;
                 GameOver();
                 break;
               }
@@ -138,39 +130,46 @@ void print()
     }
 }
 bool GameOver()
-{ gameOver = true;
-  cout<<"Player "<<GameArray[column][row]<<" won !\n";
-  return true;
+{ 
+  if(gameOver == true)
+  {
+    char GameEnd;
+    cout<<"Player "<<GameArray[column][row]<<" won !\n";
+    cout<<"\nPlay Again Y/N : ";
+    cin>>GameEnd;
+      if(GameEnd == 'Y' || GameEnd == 'y')
+        {  
+          GameLoop();
+          system("CLS");
+          return gameOver = false;
+        }
+  }
+  return gameOver;
 }
 };
 
 int main() {
-  GameLoop game;
   char St;
-  bool Stop = game.gameOver;
   there:
   cout<<"Press Any Key to Start\n";
-  cin>> St;
-  while(!Stop)
+  cin>> St ;
+  GameLoop *game = new GameLoop();;
+  do
     {
-      if(!Stop)
+      cout<<"\n here\n";
+      if(!game->gameOver)
         {
           cout<<"\nPlayer O chose Column Number : ";
-          game.input("O");
+          game->input("O");
         }
-      if(!Stop)
+      if(!game->gameOver)
         {
           cout<<"\nPlayer X chose Column Number : ";
-          game.input("X");
+          game->input("X");
         }
-    }
-  cout<<"\nPlay Again Y/N";
-  cin>>St;
-  if(St == 'Y' || St == 'y')
-  {  
-    system("CLS");
-    Stop = false;
-    goto there;
-  }
-  else{cout<<"\nThank You\n";}
+      
+    }while(!game->gameOver);
+    cout<<"\nThank You\n";
 }
+
+
