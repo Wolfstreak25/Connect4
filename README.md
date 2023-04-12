@@ -1,3 +1,3 @@
 # Connect4
 This is a game implemented in C++
-The Main branch has the old version or lets say brute force implementation while in revised branch i was able to implement the MineSweeper
+The Code Was submitted as Module Assessment Test 1 for DS Fundamentals
